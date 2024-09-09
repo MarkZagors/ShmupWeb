@@ -1,7 +1,7 @@
 using Npgsql;
 using Dapper;
-// using ShmupCreator.Repositories.Models;
-using ShmupCreator.Contracts;
+
+using ShmupCreator.Repositories.Models;
 
 namespace ShmupCreator.Repositories;
 
@@ -9,7 +9,7 @@ public class LevelMetadataRepository
 {
     private const string connString = "Server=localhost;Port=5432;User Id=postgres;Password=FFtest4;Database=mydb;";
 
-    public async Task CreateNew(LevelMetadata levelMetadata)
+    public async Task Insert(LevelMetadata levelMetadata)
     {
         using (var con = new NpgsqlConnection(connString))
         {

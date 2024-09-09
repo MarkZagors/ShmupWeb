@@ -1,4 +1,4 @@
-namespace ShmupCreator.Contracts;
+namespace ShmupCreator.Services.Models;
 
 public class LevelMetadata
 {
