@@ -27,21 +27,17 @@ public class LevelMetadataService
     public async Task<IEnumerable<LevelMetadata>> GetAll()
     {
         var levelMetadataListORM = await _levelMetadataReporitory.GetAll();
-        var levelMetadataListService = new List<LevelMetadata>();
-        foreach (var levelMetadataORM in levelMetadataListORM)
-        {
-            levelMetadataListService.Add(
-                new LevelMetadata
-                {
-                    LevelID = levelMetadataORM.LevelID,
-                    LevelName = levelMetadataORM.LevelName,
-                    Difficulty = levelMetadataORM.Difficulty,
-                    LevelScriptId = levelMetadataORM.LevelScriptId,
-                    MusicId = levelMetadataORM.MusicId
-                }
-            );
-        }
-        return levelMetadataListService;
+
+        return levelMetadataListORM
+            .Select(levelMetadataORM => new LevelMetadata
+            {
+                LevelID = levelMetadataORM.LevelID,
+                LevelName = levelMetadataORM.LevelName,
+                Difficulty = levelMetadataORM.Difficulty,
+                LevelScriptId = levelMetadataORM.LevelScriptId,
+                MusicId = levelMetadataORM.MusicId
+            })
+            .ToList();
     }
 
     public async Task Update(UpdateLevelMetadataRequest updateLevelMetadataRequest)
