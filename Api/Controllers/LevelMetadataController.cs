@@ -1,5 +1,6 @@
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Mvc;
+using ShmupCreator.Contracts;
 using ShmupCreator.Services;
 
 namespace ShmupCreator.Controllers;
@@ -16,10 +17,10 @@ public class LevelMetadataController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateNew([FromBody] Services.Models.LevelMetadataCreate levelMetadataCreate)
+    public async Task<IActionResult> CreateNew([FromBody] LevelMetadata levelMetadata)
     {
         //TODO change request model to contract request model
-        await _levelMetadataService.CreateNew(levelMetadataCreate);
+        await _levelMetadataService.CreateNew(levelMetadata);
         return Ok("Created new level metadata.");
     }
 
@@ -31,18 +32,18 @@ public class LevelMetadataController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update([FromBody] Services.Models.LevelMetadataUpdate levelMetadataUpdate)
+    public async Task<IActionResult> Update([FromBody] LevelMetadata levelMetadata)
     {
         // var updatedMetadata = TODO add return model for service and repo
-        await _levelMetadataService.Update(levelMetadataUpdate);
+        await _levelMetadataService.Update(levelMetadata);
         //TODO Return contract response model
         return Ok("Level metadata updated.");
     }
 
     [HttpDelete]
-    public async Task<IActionResult> Delete([FromBody] Services.Models.LevelMetadataDelete levelMetadataDelete)
+    public async Task<IActionResult> Delete([FromBody] LevelMetadata levelMetadata)
     {
-        await _levelMetadataService.Delete(levelMetadataDelete);
+        await _levelMetadataService.Delete(levelMetadata);
         return Ok("Level metadata deleted.");
     }
 }

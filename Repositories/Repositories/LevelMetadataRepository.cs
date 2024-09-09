@@ -1,34 +1,47 @@
 using Npgsql;
-using ShmupCreator.Repositories.Models;
+using Dapper;
+// using ShmupCreator.Repositories.Models;
+using ShmupCreator.Contracts;
 
 namespace ShmupCreator.Repositories;
 
 public class LevelMetadataRepository
 {
-    //TODO ADD DI
-    // TODO ADD DAPPER
-    public static async Task CreateNew(NpgsqlCommand cmd, LevelMetadataCreate levelMetadataCreate)
+    private const string connString = "Server=localhost;Port=5432;User Id=postgres;Password=FFtest4;Database=mydb;";
+
+    public async Task CreateNew(LevelMetadata levelMetadata)
     {
-        cmd.CommandText = $"INSERT INTO level_metadata (level_name) VALUES ('{levelMetadataCreate.LevelName}');";
-        await cmd.ExecuteNonQueryAsync();
+        using (var con = new NpgsqlConnection(connString))
+        {
+            var sql = $"INSERT INTO level_metadata (level_name) VALUES (@LevelName);";
+            await con.ExecuteAsync(sql, levelMetadata);
+        }
     }
 
-    public static async Task<NpgsqlDataReader> GetAll(NpgsqlCommand cmd)
+    public async Task<IEnumerable<LevelMetadata>> GetAll()
     {
-        cmd.CommandText = $"SELECT * FROM level_metadata";
-        var reader = await cmd.ExecuteReaderAsync();
-        return reader;
+        using (var con = new NpgsqlConnection(connString))
+        {
+            var sql = $"SELECT level_id AS LevelID, level_name AS LevelName FROM level_metadata";
+            return await con.QueryAsync<LevelMetadata>(sql);
+        }
     }
 
-    public static async Task Update(NpgsqlCommand cmd, LevelMetadataUpdate levelMetadataUpdate)
+    public async Task Update(LevelMetadata levelMetadata)
     {
-        cmd.CommandText = $"UPDATE level_metadata SET level_name='{levelMetadataUpdate.LevelName}' WHERE level_id={levelMetadataUpdate.LevelID}";
-        await cmd.ExecuteNonQueryAsync();
+        using (var con = new NpgsqlConnection(connString))
+        {
+            var sql = $"UPDATE level_metadata SET level_name=@LevelName WHERE level_id=@LevelID";
+            await con.ExecuteAsync(sql, levelMetadata);
+        }
     }
 
-    public static async Task Delete(NpgsqlCommand cmd, LevelMetadataDelete levelMetadataDelete)
+    public async Task Delete(LevelMetadata levelMetadata)
     {
-        cmd.CommandText = $"DELETE FROM level_metadata WHERE level_id={levelMetadataDelete.LevelID}";
-        await cmd.ExecuteNonQueryAsync();
+        using (var con = new NpgsqlConnection(connString))
+        {
+            var sql = $"DELETE FROM level_metadata WHERE level_id=@LevelID";
+            await con.ExecuteAsync(sql, levelMetadata);
+        }
     }
 }

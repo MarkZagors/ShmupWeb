@@ -3,76 +3,35 @@ namespace ShmupCreator.Services;
 using Npgsql;
 using ShmupCreator.Contracts;
 using ShmupCreator.Repositories;
-using ShmupCreator.Services.Models;
+// using ShmupCreator.Services.Models;
 
 public class LevelMetadataService
 {
-    private const string connString = "Server=localhost;Port=5432;User Id=postgres;Password=FFtest4;Database=mydb;";
+    private readonly LevelMetadataRepository _levelMetadataReporitory;
 
-    public async Task CreateNew(LevelMetadataCreate levelMetadataCreate)
+    public LevelMetadataService(LevelMetadataRepository levelMetadataRepository)
     {
-        //One line service
-        //TODO move to repo
-        using (var con = new NpgsqlConnection(connString))
-        {
-            con.Open();
-            var cmd = new NpgsqlCommand();
-            cmd.Connection = con;
-            await LevelMetadataRepository.CreateNew(cmd, new Repositories.Models.LevelMetadataCreate
-            {
-                LevelName = levelMetadataCreate.LevelName
-            });
-            con.Close();
-        }
+        _levelMetadataReporitory = levelMetadataRepository;
+    }
+
+    public async Task CreateNew(LevelMetadata levelMetadata)
+    {
+        await _levelMetadataReporitory.CreateNew(levelMetadata);
     }
 
     // TODO change to metadata service model
-    public async Task<ICollection<LevelMetadata>> GetAll()
+    public async Task<IEnumerable<LevelMetadata>> GetAll()
     {
-        var con = new NpgsqlConnection(connString);
-        con.Open();
-        var cmd = new NpgsqlCommand();
-        cmd.Connection = con;
-        var reader = await LevelMetadataRepository.GetAll(cmd);
-        var result = new List<LevelMetadata>();
-        while (await reader.ReadAsync())
-        {
-            result.Add(new LevelMetadata
-            {
-                LevelID = (int)reader["level_id"],
-                LevelName = (string)reader["level_name"],
-            });
-        }
-        con.Close();
-        return result;
+        return await _levelMetadataReporitory.GetAll();
     }
 
-    public async Task Update(LevelMetadataUpdate levelMetadataUpdate)
+    public async Task Update(LevelMetadata levelMetadata)
     {
-        // var requestBody = await Request.ReadFromJsonAsync
-        var con = new NpgsqlConnection(connString);
-        con.Open();
-        var cmd = new NpgsqlCommand();
-        cmd.Connection = con;
-        await LevelMetadataRepository.Update(cmd, new Repositories.Models.LevelMetadataUpdate
-        {
-            LevelID = levelMetadataUpdate.LevelID,
-            LevelName = levelMetadataUpdate.LevelName
-        });
-        con.Close();
+        await _levelMetadataReporitory.Update(levelMetadata);
     }
 
-    public async Task Delete(LevelMetadataDelete levelMetadataDelete)
+    public async Task Delete(LevelMetadata levelMetadata)
     {
-        // var requestBody = await Request.ReadFromJsonAsync
-        var con = new NpgsqlConnection(connString);
-        con.Open();
-        var cmd = new NpgsqlCommand();
-        cmd.Connection = con;
-        await LevelMetadataRepository.Delete(cmd, new Repositories.Models.LevelMetadataDelete
-        {
-            LevelID = levelMetadataDelete.LevelID
-        });
-        con.Close();
+        await _levelMetadataReporitory.Delete(levelMetadata);
     }
 }

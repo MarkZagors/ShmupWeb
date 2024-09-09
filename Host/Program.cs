@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ShmupCreator.Services;
+using ShmupCreator.Repositories;
 
 namespace Main;
 
@@ -15,6 +16,7 @@ public class Program
             typeof(LevelMetadataController).Assembly).AddControllersAsServices();
         // TODO: Add interface
         builder.Services.AddScoped<LevelMetadataService>();
+        builder.Services.AddScoped<LevelMetadataRepository>();
         // var builder = Host.CreateDefaultBuilder(args);
         // builder
         // .ConfigureServices((hostContext, services) =>

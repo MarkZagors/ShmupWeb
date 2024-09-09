@@ -1,6 +1,6 @@
-namespace ShmupCreator.Repositories.Models;
+// namespace ShmupCreator.Repositories.Models;
 
-public class LevelMetadataDelete
-{
-    public required int LevelID { get; set; }
-}
+// public class LevelMetadataDelete
+// {
+//     public required int LevelID { get; set; }
+// }

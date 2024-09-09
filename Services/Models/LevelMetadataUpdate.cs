@@ -1,7 +1,7 @@
-namespace ShmupCreator.Services.Models;
+// namespace ShmupCreator.Services.Models;
 
-public class LevelMetadataUpdate
-{
-    public required int LevelID { get; set; }
-    public required String LevelName { get; set; }
-}
+// public class LevelMetadataUpdate
+// {
+//     public required int LevelID { get; set; }
+//     public required String LevelName { get; set; }
+// }
