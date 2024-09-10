@@ -14,7 +14,7 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
         builder.Services.AddMvc().AddApplicationPart(
             typeof(LevelMetadataController).Assembly).AddControllersAsServices();
-        // TODO: Add interface
+
         builder.Services.AddScoped<ILevelMetadataService, LevelMetadataService>();
         builder.Services.AddScoped<ILevelMetadataRepository, LevelMetadataRepository>();
         // var builder = Host.CreateDefaultBuilder(args);
