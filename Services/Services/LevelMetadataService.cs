@@ -4,11 +4,19 @@ using ShmupCreator.Contracts;
 using ShmupCreator.Repositories;
 using ShmupCreator.Services.Models;
 
-public class LevelMetadataService
+public interface ILevelMetadataService
 {
-    private readonly LevelMetadataRepository _levelMetadataReporitory;
+    Task<LevelMetadata> Create(CreateLevelMetadataRequest createLevelMetadataRequest);
+    Task Delete(DeleteLevelMetadataRequest deleteLevelMetadataRequest);
+    Task<IEnumerable<LevelMetadata>> GetAll();
+    Task<LevelMetadata> Update(UpdateLevelMetadataRequest updateLevelMetadataRequest);
+}
 
-    public LevelMetadataService(LevelMetadataRepository levelMetadataRepository)
+public class LevelMetadataService : ILevelMetadataService
+{
+    private readonly ILevelMetadataRepository _levelMetadataReporitory;
+
+    public LevelMetadataService(ILevelMetadataRepository levelMetadataRepository)
     {
         _levelMetadataReporitory = levelMetadataRepository;
     }
@@ -31,7 +39,6 @@ public class LevelMetadataService
         };
     }
 
-    // TODO change to metadata service model
     public async Task<IEnumerable<LevelMetadata>> GetAll()
     {
         var levelMetadataListORM = await _levelMetadataReporitory.GetAll();

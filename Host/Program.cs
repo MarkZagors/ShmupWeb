@@ -15,8 +15,8 @@ public class Program
         builder.Services.AddMvc().AddApplicationPart(
             typeof(LevelMetadataController).Assembly).AddControllersAsServices();
         // TODO: Add interface
-        builder.Services.AddScoped<LevelMetadataService>();
-        builder.Services.AddScoped<LevelMetadataRepository>();
+        builder.Services.AddScoped<ILevelMetadataService, LevelMetadataService>();
+        builder.Services.AddScoped<ILevelMetadataRepository, LevelMetadataRepository>();
         // var builder = Host.CreateDefaultBuilder(args);
         // builder
         // .ConfigureServices((hostContext, services) =>

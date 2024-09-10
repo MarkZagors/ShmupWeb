@@ -8,9 +8,9 @@ namespace ShmupCreator.Controllers;
 [Route("[controller]")]
 public class LevelMetadataController : ControllerBase
 {
-    private readonly LevelMetadataService _levelMetadataService;
+    private readonly ILevelMetadataService _levelMetadataService;
 
-    public LevelMetadataController(LevelMetadataService levelMetadataService)
+    public LevelMetadataController(ILevelMetadataService levelMetadataService)
     {
         _levelMetadataService = levelMetadataService;
     }
@@ -18,7 +18,6 @@ public class LevelMetadataController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateNew([FromBody] CreateLevelMetadataRequest createLevelMetadataRequest)
     {
-        //TODO change request model to contract request model
         var levelMetadata = await _levelMetadataService.Create(createLevelMetadataRequest);
         return Ok(new LevelMetadataResponse
         {

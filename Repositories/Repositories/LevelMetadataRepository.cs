@@ -5,7 +5,15 @@ using ShmupCreator.Repositories.Models;
 
 namespace ShmupCreator.Repositories;
 
-public class LevelMetadataRepository
+public interface ILevelMetadataRepository
+{
+    Task Delete(LevelMetadata levelMetadata);
+    Task<IEnumerable<LevelMetadata>> GetAll();
+    Task<LevelMetadata> Insert(LevelMetadata levelMetadata);
+    Task<LevelMetadata> Update(LevelMetadata levelMetadata);
+}
+
+public class LevelMetadataRepository : ILevelMetadataRepository
 {
     private const string connString = "Server=localhost;Port=5432;User Id=postgres;Password=FFtest4;Database=mydb;";
 
