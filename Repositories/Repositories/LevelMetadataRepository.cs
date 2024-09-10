@@ -9,12 +9,19 @@ public class LevelMetadataRepository
 {
     private const string connString = "Server=localhost;Port=5432;User Id=postgres;Password=FFtest4;Database=mydb;";
 
-    public async Task Insert(LevelMetadata levelMetadata)
+    private async Task<LevelMetadata> GetLevelMetadataById(NpgsqlConnection con, int id)
+    {
+        var sql = $"SELECT * FROM level_metadata WHERE LevelID={id}";
+        return await con.QuerySingleAsync<LevelMetadata>(sql);
+    }
+
+    public async Task<LevelMetadata> Insert(LevelMetadata levelMetadata)
     {
         using (var con = new NpgsqlConnection(connString))
         {
-            var sql = $"INSERT INTO level_metadata (level_name) VALUES (@LevelName);";
-            await con.ExecuteAsync(sql, levelMetadata);
+            var sql = $"INSERT INTO level_metadata (LevelName) VALUES (@LevelName) RETURNING LevelID;";
+            int levelID = await con.QuerySingleAsync<int>(sql, levelMetadata);
+            return await GetLevelMetadataById(con, levelID);
         }
     }
 
@@ -22,17 +29,18 @@ public class LevelMetadataRepository
     {
         using (var con = new NpgsqlConnection(connString))
         {
-            var sql = $"SELECT level_id AS LevelID, level_name AS LevelName FROM level_metadata";
+            var sql = $"SELECT * FROM level_metadata";
             return await con.QueryAsync<LevelMetadata>(sql);
         }
     }
 
-    public async Task Update(LevelMetadata levelMetadata)
+    public async Task<LevelMetadata> Update(LevelMetadata levelMetadata)
     {
         using (var con = new NpgsqlConnection(connString))
         {
-            var sql = $"UPDATE level_metadata SET level_name=@LevelName WHERE level_id=@LevelID";
-            await con.ExecuteAsync(sql, levelMetadata);
+            var sql = $"UPDATE level_metadata SET LevelName=@LevelName WHERE LevelID=@LevelID RETURNING LevelID";
+            int levelID = await con.QuerySingleAsync<int>(sql, levelMetadata);
+            return await GetLevelMetadataById(con, levelID);
         }
     }
 
@@ -40,7 +48,7 @@ public class LevelMetadataRepository
     {
         using (var con = new NpgsqlConnection(connString))
         {
-            var sql = $"DELETE FROM level_metadata WHERE level_id=@LevelID";
+            var sql = $"DELETE FROM level_metadata WHERE LevelID=@LevelID";
             await con.ExecuteAsync(sql, levelMetadata);
         }
     }

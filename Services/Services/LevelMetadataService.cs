@@ -13,14 +13,22 @@ public class LevelMetadataService
         _levelMetadataReporitory = levelMetadataRepository;
     }
 
-    public async Task Create(CreateLevelMetadataRequest createLevelMetadataRequest)
+    public async Task<LevelMetadata> Create(CreateLevelMetadataRequest createLevelMetadataRequest)
     {
-        await _levelMetadataReporitory.Insert(
+        var levelMetadataORM = await _levelMetadataReporitory.Insert(
             new Repositories.Models.LevelMetadata
             {
                 LevelName = createLevelMetadataRequest.LevelName
             }
         );
+        return new LevelMetadata
+        {
+            LevelID = levelMetadataORM.LevelID,
+            LevelName = levelMetadataORM.LevelName,
+            Difficulty = levelMetadataORM.Difficulty,
+            LevelScriptId = levelMetadataORM.LevelScriptId,
+            MusicId = levelMetadataORM.MusicId
+        };
     }
 
     // TODO change to metadata service model
@@ -40,15 +48,23 @@ public class LevelMetadataService
             .ToList();
     }
 
-    public async Task Update(UpdateLevelMetadataRequest updateLevelMetadataRequest)
+    public async Task<LevelMetadata> Update(UpdateLevelMetadataRequest updateLevelMetadataRequest)
     {
-        await _levelMetadataReporitory.Update(
+        var levelMetadataORM = await _levelMetadataReporitory.Update(
             new Repositories.Models.LevelMetadata
             {
                 LevelID = updateLevelMetadataRequest.LevelID,
                 LevelName = updateLevelMetadataRequest.LevelName
             }
         );
+        return new LevelMetadata
+        {
+            LevelID = levelMetadataORM.LevelID,
+            LevelName = levelMetadataORM.LevelName,
+            Difficulty = levelMetadataORM.Difficulty,
+            LevelScriptId = levelMetadataORM.LevelScriptId,
+            MusicId = levelMetadataORM.MusicId
+        };
     }
 
     public async Task Delete(DeleteLevelMetadataRequest deleteLevelMetadataRequest)

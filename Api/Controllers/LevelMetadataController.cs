@@ -19,24 +19,44 @@ public class LevelMetadataController : ControllerBase
     public async Task<IActionResult> CreateNew([FromBody] CreateLevelMetadataRequest createLevelMetadataRequest)
     {
         //TODO change request model to contract request model
-        await _levelMetadataService.Create(createLevelMetadataRequest);
-        return Ok("Created new level metadata.");
+        var levelMetadata = await _levelMetadataService.Create(createLevelMetadataRequest);
+        return Ok(new LevelMetadataResponse
+        {
+            LevelID = levelMetadata.LevelID,
+            LevelName = levelMetadata.LevelName,
+            LevelScriptId = levelMetadata.LevelScriptId,
+            MusicId = levelMetadata.MusicId,
+            Difficulty = levelMetadata.Difficulty
+        });
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
         var levelMetadataList = await _levelMetadataService.GetAll();
-        return Ok(levelMetadataList);
+        var levelMetadataResponses = levelMetadataList.Select(levelMetadata => new LevelMetadataResponse
+        {
+            LevelID = levelMetadata.LevelID,
+            LevelName = levelMetadata.LevelName,
+            LevelScriptId = levelMetadata.LevelScriptId,
+            MusicId = levelMetadata.MusicId,
+            Difficulty = levelMetadata.Difficulty
+        });
+        return Ok(levelMetadataResponses);
     }
 
     [HttpPut]
     public async Task<IActionResult> Update([FromBody] UpdateLevelMetadataRequest updateLevelMetadataRequest)
     {
-        // var updatedMetadata = TODO add return model for service and repo
-        await _levelMetadataService.Update(updateLevelMetadataRequest);
-        //TODO Return contract response model
-        return Ok("Level metadata updated.");
+        var levelMetadata = await _levelMetadataService.Update(updateLevelMetadataRequest);
+        return Ok(new LevelMetadataResponse
+        {
+            LevelID = levelMetadata.LevelID,
+            LevelName = levelMetadata.LevelName,
+            LevelScriptId = levelMetadata.LevelScriptId,
+            MusicId = levelMetadata.MusicId,
+            Difficulty = levelMetadata.Difficulty
+        });
     }
 
     [HttpDelete]
