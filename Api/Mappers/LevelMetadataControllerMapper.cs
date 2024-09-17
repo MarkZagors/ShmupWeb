@@ -1,16 +1,13 @@
-using ShmupCreator.Contracts;
-using ShmupCreator.Services.Models;
-
 public interface ILevelMetadataControllerMapper
 {
-    LevelMetadataResponse MapToLevelMetadataResponse(LevelMetadata levelMetadata);
+    ShmupCreator.Contracts.LevelMetadataResponse MapToLevelMetadataResponse(ShmupCreator.Services.Models.LevelMetadata levelMetadata);
 }
 
 public class LevelMetadataControllerMapper : ILevelMetadataControllerMapper
 {
-    public LevelMetadataResponse MapToLevelMetadataResponse(ShmupCreator.Services.Models.LevelMetadata levelMetadata)
+    public ShmupCreator.Contracts.LevelMetadataResponse MapToLevelMetadataResponse(ShmupCreator.Services.Models.LevelMetadata levelMetadata)
     {
-        return new LevelMetadataResponse
+        return new ShmupCreator.Contracts.LevelMetadataResponse
         {
             LevelID = levelMetadata.LevelID,
             LevelName = levelMetadata.LevelName,

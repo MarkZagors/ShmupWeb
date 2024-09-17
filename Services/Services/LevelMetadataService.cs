@@ -15,28 +15,18 @@ public interface ILevelMetadataService
 public class LevelMetadataService : ILevelMetadataService
 {
     private readonly ILevelMetadataRepository _levelMetadataReporitory;
+    private readonly ILevelMetadataServiceMapper _mapper;
 
-    public LevelMetadataService(ILevelMetadataRepository levelMetadataRepository)
+    public LevelMetadataService(ILevelMetadataRepository levelMetadataRepository, ILevelMetadataServiceMapper mapper)
     {
         _levelMetadataReporitory = levelMetadataRepository;
+        _mapper = mapper;
     }
 
     public async Task<LevelMetadata> Create(CreateLevelMetadataRequest createLevelMetadataRequest)
     {
-        var levelMetadataORM = await _levelMetadataReporitory.Insert(
-            new Repositories.Models.LevelMetadata
-            {
-                LevelName = createLevelMetadataRequest.LevelName
-            }
-        );
-        return new LevelMetadata
-        {
-            LevelID = levelMetadataORM.LevelID,
-            LevelName = levelMetadataORM.LevelName,
-            Difficulty = levelMetadataORM.Difficulty,
-            LevelScriptId = levelMetadataORM.LevelScriptId,
-            MusicId = levelMetadataORM.MusicId
-        };
+        var levelMetadataORM = await _levelMetadataReporitory.Insert(_mapper.MapToLevelMetadataORM(createLevelMetadataRequest));
+        return _mapper.MapToLevelMetadataService(levelMetadataORM);
     }
 
     public async Task<IEnumerable<LevelMetadata>> GetAll()
@@ -44,43 +34,18 @@ public class LevelMetadataService : ILevelMetadataService
         var levelMetadataListORM = await _levelMetadataReporitory.GetAll();
 
         return levelMetadataListORM
-            .Select(levelMetadataORM => new LevelMetadata
-            {
-                LevelID = levelMetadataORM.LevelID,
-                LevelName = levelMetadataORM.LevelName,
-                Difficulty = levelMetadataORM.Difficulty,
-                LevelScriptId = levelMetadataORM.LevelScriptId,
-                MusicId = levelMetadataORM.MusicId
-            })
+            .Select(levelMetadataORM => _mapper.MapToLevelMetadataService(levelMetadataORM))
             .ToList();
     }
 
     public async Task<LevelMetadata> Update(UpdateLevelMetadataRequest updateLevelMetadataRequest)
     {
-        var levelMetadataORM = await _levelMetadataReporitory.Update(
-            new Repositories.Models.LevelMetadata
-            {
-                LevelID = updateLevelMetadataRequest.LevelID,
-                LevelName = updateLevelMetadataRequest.LevelName
-            }
-        );
-        return new LevelMetadata
-        {
-            LevelID = levelMetadataORM.LevelID,
-            LevelName = levelMetadataORM.LevelName,
-            Difficulty = levelMetadataORM.Difficulty,
-            LevelScriptId = levelMetadataORM.LevelScriptId,
-            MusicId = levelMetadataORM.MusicId
-        };
+        var levelMetadataORM = await _levelMetadataReporitory.Update(_mapper.MapToLevelMetadataORM(updateLevelMetadataRequest));
+        return _mapper.MapToLevelMetadataService(levelMetadataORM);
     }
 
     public async Task Delete(DeleteLevelMetadataRequest deleteLevelMetadataRequest)
     {
-        await _levelMetadataReporitory.Delete(
-            new Repositories.Models.LevelMetadata
-            {
-                LevelID = deleteLevelMetadataRequest.LevelID
-            }
-        );
+        await _levelMetadataReporitory.Delete(_mapper.MapToLevelMetadataORM(deleteLevelMetadataRequest));
     }
 }
