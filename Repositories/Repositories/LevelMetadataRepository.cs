@@ -2,6 +2,7 @@ using Npgsql;
 using Dapper;
 
 using ShmupCreator.Repositories.Models;
+using ShmupCreator.Repositories.Queries;
 
 namespace ShmupCreator.Repositories;
 
@@ -21,7 +22,7 @@ public class LevelMetadataRepository : ILevelMetadataRepository
     {
         var parameters = new DynamicParameters();
         parameters.Add("@Id", id);
-        var sql = $"SELECT * FROM level_metadata WHERE LevelID=@Id";
+        var sql = LevelMetadataQueries.GetLevelMetadataById;
         return await con.QuerySingleAsync<LevelMetadata>(sql, parameters);
     }
 
@@ -29,7 +30,7 @@ public class LevelMetadataRepository : ILevelMetadataRepository
     {
         using (var con = new NpgsqlConnection(connString))
         {
-            var sql = $"INSERT INTO level_metadata (LevelName) VALUES (@LevelName) RETURNING LevelID;";
+            var sql = LevelMetadataQueries.InsertLevelMetadataByName;
             int levelID = await con.QuerySingleAsync<int>(sql, levelMetadata);
             return await GetLevelMetadataById(con, levelID);
         }
@@ -39,7 +40,7 @@ public class LevelMetadataRepository : ILevelMetadataRepository
     {
         using (var con = new NpgsqlConnection(connString))
         {
-            var sql = $"SELECT * FROM level_metadata";
+            var sql = LevelMetadataQueries.GetLevelMetadataAll;
             return await con.QueryAsync<LevelMetadata>(sql);
         }
     }
@@ -48,7 +49,7 @@ public class LevelMetadataRepository : ILevelMetadataRepository
     {
         using (var con = new NpgsqlConnection(connString))
         {
-            var sql = $"UPDATE level_metadata SET LevelName=@LevelName WHERE LevelID=@LevelID RETURNING LevelID";
+            var sql = LevelMetadataQueries.UpdateLevelMetadata;
             int levelID = await con.QuerySingleAsync<int>(sql, levelMetadata);
             return await GetLevelMetadataById(con, levelID);
         }
@@ -58,7 +59,7 @@ public class LevelMetadataRepository : ILevelMetadataRepository
     {
         using (var con = new NpgsqlConnection(connString))
         {
-            var sql = $"DELETE FROM level_metadata WHERE LevelID=@LevelID";
+            var sql = LevelMetadataQueries.DeleteLevelMetadata;
             await con.ExecuteAsync(sql, levelMetadata);
         }
     }
