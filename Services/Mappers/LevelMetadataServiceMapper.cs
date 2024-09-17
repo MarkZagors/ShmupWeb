@@ -1,5 +1,7 @@
 using ShmupCreator.Contracts;
 
+namespace ShmupCreator.Services.Mappers;
+
 public interface ILevelMetadataServiceMapper
 {
     ShmupCreator.Repositories.Models.LevelMetadata MapToLevelMetadataORM(CreateLevelMetadataRequest createLevelMetadataRequest);

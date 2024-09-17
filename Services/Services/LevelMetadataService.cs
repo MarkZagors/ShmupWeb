@@ -1,8 +1,9 @@
-namespace ShmupCreator.Services;
-
 using ShmupCreator.Contracts;
 using ShmupCreator.Repositories;
+using ShmupCreator.Services.Mappers;
 using ShmupCreator.Services.Models;
+
+namespace ShmupCreator.Services;
 
 public interface ILevelMetadataService
 {

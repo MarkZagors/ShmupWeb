@@ -19,8 +19,10 @@ public class LevelMetadataRepository : ILevelMetadataRepository
 
     private async Task<LevelMetadata> GetLevelMetadataById(NpgsqlConnection con, int id)
     {
-        var sql = $"SELECT * FROM level_metadata WHERE LevelID={id}";
-        return await con.QuerySingleAsync<LevelMetadata>(sql);
+        var parameters = new DynamicParameters();
+        parameters.Add("@Id", id);
+        var sql = $"SELECT * FROM level_metadata WHERE LevelID=@Id";
+        return await con.QuerySingleAsync<LevelMetadata>(sql, parameters);
     }
 
     public async Task<LevelMetadata> Insert(LevelMetadata levelMetadata)

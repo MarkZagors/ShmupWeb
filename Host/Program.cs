@@ -6,6 +6,9 @@ using ShmupCreator.Services;
 using ShmupCreator.Repositories;
 using ShmupCreator.Contracts;
 using FluentValidation;
+using ShmupCreator.Controllers.Mappers;
+using ShmupCreator.Controllers.Validation;
+using ShmupCreator.Services.Mappers;
 
 namespace Main;
 

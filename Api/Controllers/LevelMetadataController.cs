@@ -2,6 +2,7 @@ using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using ShmupCreator.Contracts;
+using ShmupCreator.Controllers.Mappers;
 using ShmupCreator.Services;
 
 namespace ShmupCreator.Controllers;

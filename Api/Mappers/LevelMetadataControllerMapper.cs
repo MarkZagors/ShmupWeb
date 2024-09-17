@@ -1,3 +1,5 @@
+namespace ShmupCreator.Controllers.Mappers;
+
 public interface ILevelMetadataControllerMapper
 {
     ShmupCreator.Contracts.LevelMetadataResponse MapToLevelMetadataResponse(ShmupCreator.Services.Models.LevelMetadata levelMetadata);
