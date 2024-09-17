@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ShmupCreator.Services;
 using ShmupCreator.Repositories;
+using ShmupCreator.Contracts;
+using FluentValidation;
 
 namespace Main;
 
@@ -17,8 +19,13 @@ public class Program
 
         builder.Services.AddScoped<ILevelMetadataService, LevelMetadataService>();
         builder.Services.AddScoped<ILevelMetadataRepository, LevelMetadataRepository>();
+
         builder.Services.AddScoped<ILevelMetadataControllerMapper, LevelMetadataControllerMapper>();
         builder.Services.AddScoped<ILevelMetadataServiceMapper, LevelMetadataServiceMapper>();
+
+        builder.Services.AddScoped<IValidator<CreateLevelMetadataRequest>, CreateLevelMetadataValidator>();
+        builder.Services.AddScoped<IValidator<UpdateLevelMetadataRequest>, UpdateLevelMetadataValidator>();
+        builder.Services.AddScoped<IValidator<DeleteLevelMetadataRequest>, DeleteLevelMetadataValidator>();
         // var builder = Host.CreateDefaultBuilder(args);
         // builder
         // .ConfigureServices((hostContext, services) =>
