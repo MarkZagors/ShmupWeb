@@ -17,6 +17,7 @@ public class Program
 
         builder.Services.AddScoped<ILevelMetadataService, LevelMetadataService>();
         builder.Services.AddScoped<ILevelMetadataRepository, LevelMetadataRepository>();
+        builder.Services.AddScoped<ILevelMetadataControllerMapper, LevelMetadataControllerMapper>();
         // var builder = Host.CreateDefaultBuilder(args);
         // builder
         // .ConfigureServices((hostContext, services) =>

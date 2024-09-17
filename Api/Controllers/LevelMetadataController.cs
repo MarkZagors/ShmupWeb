@@ -9,38 +9,26 @@ namespace ShmupCreator.Controllers;
 public class LevelMetadataController : ControllerBase
 {
     private readonly ILevelMetadataService _levelMetadataService;
+    private readonly ILevelMetadataControllerMapper _mapper;
 
-    public LevelMetadataController(ILevelMetadataService levelMetadataService)
+    public LevelMetadataController(ILevelMetadataService levelMetadataService, ILevelMetadataControllerMapper mapper)
     {
         _levelMetadataService = levelMetadataService;
+        _mapper = mapper;
     }
 
     [HttpPost]
     public async Task<IActionResult> CreateNew([FromBody] CreateLevelMetadataRequest createLevelMetadataRequest)
     {
         var levelMetadata = await _levelMetadataService.Create(createLevelMetadataRequest);
-        return Ok(new LevelMetadataResponse
-        {
-            LevelID = levelMetadata.LevelID,
-            LevelName = levelMetadata.LevelName,
-            LevelScriptId = levelMetadata.LevelScriptId,
-            MusicId = levelMetadata.MusicId,
-            Difficulty = levelMetadata.Difficulty
-        });
+        return Ok(_mapper.MapToLevelMetadataResponse(levelMetadata));
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
         var levelMetadataList = await _levelMetadataService.GetAll();
-        var levelMetadataResponses = levelMetadataList.Select(levelMetadata => new LevelMetadataResponse
-        {
-            LevelID = levelMetadata.LevelID,
-            LevelName = levelMetadata.LevelName,
-            LevelScriptId = levelMetadata.LevelScriptId,
-            MusicId = levelMetadata.MusicId,
-            Difficulty = levelMetadata.Difficulty
-        });
+        var levelMetadataResponses = levelMetadataList.Select(levelMetadata => _mapper.MapToLevelMetadataResponse(levelMetadata));
         return Ok(levelMetadataResponses);
     }
 
@@ -48,14 +36,7 @@ public class LevelMetadataController : ControllerBase
     public async Task<IActionResult> Update([FromBody] UpdateLevelMetadataRequest updateLevelMetadataRequest)
     {
         var levelMetadata = await _levelMetadataService.Update(updateLevelMetadataRequest);
-        return Ok(new LevelMetadataResponse
-        {
-            LevelID = levelMetadata.LevelID,
-            LevelName = levelMetadata.LevelName,
-            LevelScriptId = levelMetadata.LevelScriptId,
-            MusicId = levelMetadata.MusicId,
-            Difficulty = levelMetadata.Difficulty
-        });
+        return Ok(_mapper.MapToLevelMetadataResponse(levelMetadata));
     }
 
     [HttpDelete]
