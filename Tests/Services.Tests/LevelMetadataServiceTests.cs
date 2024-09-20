@@ -14,8 +14,8 @@ public class LevelMetadataServiceTests
 
     public LevelMetadataServiceTests()
     {
-        _mockLevelMetadataRepository = new Mock<ILevelMetadataRepository>(MockBehavior.Loose);
-        _mockMapper = new Mock<ILevelMetadataServiceMapper>(MockBehavior.Loose);
+        _mockLevelMetadataRepository = new Mock<ILevelMetadataRepository>(MockBehavior.Strict);
+        _mockMapper = new Mock<ILevelMetadataServiceMapper>(MockBehavior.Strict);
     }
 
     [Fact]
