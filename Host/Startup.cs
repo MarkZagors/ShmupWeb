@@ -1,6 +1,8 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
+using Serilog.Formatting.Json;
 using ShmupCreator.Contracts;
 using ShmupCreator.Controllers;
 using ShmupCreator.Controllers.Mappers;
@@ -24,14 +26,28 @@ public class Startup
         services.AddScoped<IValidator<CreateLevelMetadataRequest>, CreateLevelMetadataValidator>();
         services.AddScoped<IValidator<UpdateLevelMetadataRequest>, UpdateLevelMetadataValidator>();
         services.AddScoped<IValidator<DeleteLevelMetadataRequest>, DeleteLevelMetadataValidator>();
+
+        // services.AddLogging();
     }
 
     public void Configure(IApplicationBuilder app)
     {
         app.UseRouting();
+
+        ConfigureLogging();
+
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
         });
+    }
+
+    private void ConfigureLogging()
+    {
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Information()
+            // .WriteTo.File(formatter: new JsonFormatter(), "Logging/log.txt")
+            .WriteTo.File("Logging/log.txt")
+            .CreateLogger();
     }
 }

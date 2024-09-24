@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using ShmupCreator.Contracts;
 using ShmupCreator.Controllers.Mappers;
 using ShmupCreator.Services;
+using Serilog;
 
 namespace ShmupCreator.Controllers;
 
@@ -49,6 +50,7 @@ public class LevelMetadataController : ControllerBase
     {
         var levelMetadataList = await _levelMetadataService.GetAll();
         var levelMetadataResponses = levelMetadataList.Select(levelMetadata => _mapper.MapToLevelMetadataResponse(levelMetadata));
+        Log.Information("Level metadata => {@levelMetadataResponses}", levelMetadataResponses);
         return Ok(levelMetadataResponses);
     }
 
